@@ -1,3 +1,12 @@
+/*
+This is the program’s starting point. 
+It loads config (.env), 
+	opens the database connection, 
+	wires everything together (repositories → services → handlers → routes), 
+	starts the HTTP server, 
+	and handles graceful shutdown on SIGINT/SIGTERM. 
+	It should contain almost no business logic.
+*/
 package main
 
 import (

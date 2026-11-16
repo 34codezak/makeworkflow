@@ -1,0 +1,3 @@
+/*
+validates the token or session on protected routes and puts the user into the request context.
+*/
