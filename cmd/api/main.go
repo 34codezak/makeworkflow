@@ -10,29 +10,35 @@ It loads config (.env),
 package main
 
 import (
-	"context"
+	"context" // for graceful shutdown of the HTTP server
 	"database/sql"
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
+	"os/signal" 
+	"syscall" 
 	"time"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	"github.com/34codezak/makeworkflow/internal/config"
-	"github.com/34codezak/makeworkflow/internal/handlers"
-	"github.com/34codezak/makeworkflow/internal/repositories"
-	"github.com/34codezak/makeworkflow/internal/routes"
-	"github.com/34codezak/makeworkflow/internal/services"
+	// "github.com/34codezak/makeworkflow/internal/config"
+	// "github.com/34codezak/makeworkflow/internal/handlers"
+	// "github.com/34codezak/makeworkflow/internal/repositories"
+	// "github.com/34codezak/makeworkflow/internal/routes"
+	// "github.com/34codezak/makeworkflow/internal/services"
 	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	// Load environment variables from .env file if it exists, otherwise use system environment
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using system environment")
-	}
+    if os.IsNotExist(err) {
+        	log.Println("No .env file found, using system environment")
+    	} else {
+        	log.Fatal(err) // real problem: file exists but couldn't be read
+    	}
+	}   
 
 	cfg := config.Load()
 
@@ -51,20 +57,21 @@ func main() {
 	}
 
 	// Wire dependencies bottom-up
-	userRepo := repositories.NewUserRepository(db)
-	taskRepo := repositories.NewTaskRepository(db)
-	projectRepo := repositories.NewProjectRepository(db)
+	// userRepo := repositories.NewUserRepository(db)
+	// taskRepo := repositories.NewTaskRepository(db)
+	// projectRepo := repositories.NewProjectRepository(db)
 
-	authService := services.NewAuthService(userRepo, cfg)
-	taskService := services.NewTaskService(taskRepo, projectRepo)
-	projectService := services.NewProjectService(projectRepo)
+	// authService := services.NewAuthService(userRepo, cfg)
+	// taskService := services.NewTaskService(taskRepo, projectRepo)
+	// projectService := services.NewProjectService(projectRepo)
 
-	authHandler := handlers.NewAuthHandler(authService)
-	taskHandler := handlers.NewTaskHandler(taskService)
-	projectHandler := handlers.NewProjectHandler(projectService)
+	// authHandler := handlers.NewAuthHandler(authService)
+	// taskHandler := handlers.NewTaskHandler(taskService)
+	// projectHandler := handlers.NewProjectHandler(projectService)
 
-	r := routes.NewRouter(authHandler, taskHandler, projectHandler)
+	// r := routes.NewRouter(authHandler, taskHandler, projectHandler)
 
+	// Initialize the router with handlers and middleware
 	srv := &http.Server{
 		Addr:         ":" + cfg.Port,
 		Handler:      r,
