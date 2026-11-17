@@ -21,7 +21,7 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	// "github.com/34codezak/makeworkflow/internal/config"
+	"github.com/34codezak/makeworkflow/internal/config"
 	// "github.com/34codezak/makeworkflow/internal/handlers"
 	// "github.com/34codezak/makeworkflow/internal/repositories"
 	// "github.com/34codezak/makeworkflow/internal/routes"
@@ -33,7 +33,7 @@ func main() {
 
 	// Load environment variables from .env file if it exists, otherwise use system environment
 	if err := godotenv.Load(); err != nil {
-    if os.IsNotExist(err) {
+    	if os.IsNotExist(err) {
         	log.Println("No .env file found, using system environment")
     	} else {
         	log.Fatal(err) // real problem: file exists but couldn't be read
